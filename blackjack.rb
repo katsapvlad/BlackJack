@@ -2,42 +2,137 @@
 
 require 'io/console'
 require './my_cards'
+require './opponents_cards'
+require './card'
 # this class includes some information about the game process
 class BlackJack
-  def welcome
-    system('reset')
-    puts '  WELCOME TO BLACKJACK!  '.center(150, " \u2667  \u2662  \u2661  \u2664 ")
-    puts "\n\n"
-    sleep(2)
-    introduction
-    puts "Let's start! Press any button to start the game. Good Luck!".center(150)
-    start_game if gets
-  end
-
   def start_game
-    puts "\n\n#{" \u2667   \u2662   \u2661   \u2664 " * 10}\n\n"
-    hand = MyCards.new
-    hand.my_cards.each do |card|
-      show_cards(card)
-    end
+    welcome
+    game_process
   end
 
   private
 
+  def welcome
+    system('reset')
+    puts 'WELCOME TO BLACKJACK!'.center(150, " \u2667  \u2662  \u2661  \u2664 ")
+    introduction
+  end
+
   def introduction
+    puts "\n\n"
     puts "Before we start the game, let's get acquainted.".center(150)
     puts "What's your name?\n".center(150)
     name = $stdin.noecho(&:gets).strip.capitalize
-    sleep(1)
     puts "Hello, #{name}! My name's Black Jack, and today I'm your opponent.".center(150)
-    sleep(1)
   end
 
-  def show_cards(card)
-    puts "   --------\n" + "   |#{card.rank}     |\n" \
-         "   | #{card.suit}    |\n" + "   |  #{card.suit}   |\n" + "   |   #{card.suit}  |\n" \
-         "   |     #{card.rank}|\n" + "   --------\n"
+  def game_process
+    puts "Let's start! Press Enter to start the game. Good Luck!".center(150)
+    return unless gets
+
+    puts "\n\n#{" \u2667   \u2662   \u2661   \u2664 " * 10}\n\n"
+    deck = Deck.new
+    hand = MyCards.new(deck)
+    opp_hand = OpponentsCards.new(deck)
+    total_value = 0
+    opp_total_value = 0
+    puts 'My cards:'
+    hand.show_cards(hand.my_cards)
+    puts 'Opponents cards:'
+    opp_hand.show_empty_cards(opp_hand.opp_cards)
+    hand.my_cards.each do |card|
+      card.my_ace_validation(card)
+      total_value += card.value
+    end
+    opp_hand.opp_cards.each do |card|
+      card.opp_ace_validation(card, opp_total_value)
+      opp_total_value += card.value
+    end
+    ask_about_continued(total_value, deck, hand, opp_total_value, opp_hand)
+  end
+
+  def ask_about_continued(total_value, deck, hand, opp_total_value, opp_hand)
+    puts "\nTotal value: #{total_value}\nDo you want to take another card?: Yes(default) or No"
+    answ = gets.strip.capitalize
+    if answ == 'No'
+      opp_takes_cards(deck, opp_hand, opp_total_value)
+      puts 'My cards:'
+      hand.show_cards(hand.my_cards)
+      puts 'Opponents cards:'
+      opp_hand.show_cards(opp_hand.opp_cards)
+      result_calculating(total_value, opp_total_value)
+      play_again
+    else
+
+      hand.continue(deck, hand)
+      if opp_total_value < 17
+        opp_hand.continue(deck, opp_hand, opp_total_value)
+        opp_total_value += opp_hand.opp_cards[-1].value
+      end
+      puts 'Opponents cards:'
+      opp_hand.show_empty_cards(opp_hand.opp_cards)
+      hand.my_cards[-1].my_ace_validation(hand.my_cards[-1])
+      total_value += hand.my_cards[-1].value
+      ask_about_continued(total_value, deck, hand, opp_total_value, opp_hand)
+    end
+  end
+
+  def opp_takes_cards(deck, opp_hand, opp_total_value)
+    a = 0
+    b = 0
+    loop do
+      if opp_total_value < 17
+        opp_hand.continue(deck, opp_hand, opp_total_value)
+        opp_hand.opp_cards[-1].value == 11 if opp_total_value < 11
+        opp_total_value += opp_hand.opp_cards[-1].value
+      end
+      a = opp_total_value
+      break if a == b
+
+      b = opp_total_value
+    end
+  end
+
+  def result_calculating(total_value, opp_total_value)
+    if total_value > 21 && opp_total_value > 21 then nobody_win_message(total_value, opp_total_value)
+    elsif total_value == opp_total_value then nobody_win_message(total_value, opp_total_value)
+    elsif total_value > opp_total_value && total_value < 21 then winer_message(total_value, opp_total_value)
+    elsif total_value < opp_total_value && opp_total_value < 21 then loser_message(total_value, opp_total_value)
+    elsif total_value == 21 || opp_total_value > 21 then winer_message(total_value, opp_total_value)
+    elsif total_value > 21 || opp_total_value == 21 then loser_message(total_value, opp_total_value)
+    end
+  end
+
+  def play_again
+    puts "\n\nDo you wanna play again?: Yes(default) or No"
+    answ = gets.strip.capitalize
+    unless answ == 'No'
+      system('reset')
+      game_process
+    end
+  end
+
+  def winer_message(total_value, opp_total_value)
+    total_values(total_value, opp_total_value)
+    puts 'You are winner!!!'.center(150)
+  end
+
+  def loser_message(total_value, opp_total_value)
+    total_values(total_value, opp_total_value)
+    puts 'You are loser...'.center(150)
+  end
+
+  def nobody_win_message(total_value, opp_total_value)
+    total_values(total_value, opp_total_value)
+    puts 'Nobody win!'.center(150)
+  end
+
+  def total_values(total_value, opp_total_value)
+    puts "\n\n#{" \u2667   \u2662   \u2661   \u2664 " * 10}\n\n"
+    puts "\n\n#{"Total value: #{total_value}\n".center(150)}"
+    puts "Opponents total value: #{opp_total_value}\n".center(150)
   end
 end
 game = BlackJack.new
-game.welcome
+game.start_game

@@ -17,8 +17,3 @@ class Deck
     @cards.shuffle!
   end
 end
-
-# deck = Deck.new
-# deck.cards.each do |card|
-# puts card.rank + card.suit
-# end
