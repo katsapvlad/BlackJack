@@ -56,7 +56,19 @@ class BlackJack
     puts "\nTotal value: #{total_value}\nDo you want to take another card?: Yes(default) or No"
     answ = gets.strip.capitalize
     if answ == 'No'
-      opp_takes_cards(deck, opp_hand, opp_total_value)
+    a = 0
+    b = 0
+    loop do
+      if opp_total_value < 17
+        opp_hand.continue(deck, opp_hand, opp_total_value)
+        opp_hand.opp_cards[-1].value == 11 if opp_total_value < 11
+        opp_total_value += opp_hand.opp_cards[-1].value
+      end
+      a = opp_total_value
+      break if a == b
+
+      b = opp_total_value
+    end
       puts 'My cards:'
       hand.show_cards(hand.my_cards)
       puts 'Opponents cards:'
@@ -75,22 +87,6 @@ class BlackJack
       hand.my_cards[-1].my_ace_validation(hand.my_cards[-1])
       total_value += hand.my_cards[-1].value
       ask_about_continued(total_value, deck, hand, opp_total_value, opp_hand)
-    end
-  end
-
-  def opp_takes_cards(deck, opp_hand, opp_total_value)
-    a = 0
-    b = 0
-    loop do
-      if opp_total_value < 17
-        opp_hand.continue(deck, opp_hand, opp_total_value)
-        opp_hand.opp_cards[-1].value == 11 if opp_total_value < 11
-        opp_total_value += opp_hand.opp_cards[-1].value
-      end
-      a = opp_total_value
-      break if a == b
-
-      b = opp_total_value
     end
   end
 
