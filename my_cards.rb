@@ -18,30 +18,6 @@ class MyCards
     @my_cards << deck.cards[0]
     deck.cards.delete_at(0)
     puts 'My cards:'
-    show_cards(hand.my_cards)
-  end
-
-  def show_cards(hand)
-    print ' ' * 10
-    hand.size.times { print '--------     ' }
-    card(hand)
-    print "\n#{' ' * 10}"
-    hand.size.times { print '--------     ' }
-    puts ' '
-  end
-
-  private
-
-  def card(hand)
-    print "\n#{' ' * 10}"
-    1.upto(hand.size) { |i| print "|#{hand[i - 1].value}     |     " }
-    print "\n#{' ' * 10}"
-    1.upto(hand.size) { |i| print "| #{hand[i - 1].suit}    |     " }
-    print "\n#{' ' * 10}"
-    1.upto(hand.size) { |i| print "|  #{hand[i - 1].suit}   |     " }
-    print "\n#{' ' * 10}"
-    1.upto(hand.size) { |i| print "|   #{hand[i - 1].suit}  |     " }
-    print "\n#{' ' * 10}"
-    1.upto(hand.size) { |i| print "|     #{hand[i - 1].value}|     " }
+    hand.my_cards.first.display_hand(hand.my_cards)
   end
 end

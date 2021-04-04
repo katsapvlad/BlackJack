@@ -70,9 +70,9 @@ class BlackJack
       b = opp_total_value
     end
       puts 'My cards:'
-      hand.show_cards(hand.my_cards)
+      hand.my_cards.first.display_hand(hand.my_cards)
       puts 'Opponents cards:'
-      opp_hand.show_cards(opp_hand.opp_cards)
+      opp_hand.opp_cards.first.display_hand(opp_hand.opp_cards)
       result_calculating(total_value, opp_total_value)
       play_again
     else

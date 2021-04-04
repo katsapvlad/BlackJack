@@ -3,7 +3,7 @@
 # this class includes some information about the card
 class Card
   SUITS_MAP = { 'hearts' => "\u2661", 'clubs' => "\u2667", 'diamons' => "\u2662", 'spades' => "\u2664" }.freeze
-  RANKS = { 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10, 'J' => 2, 'Q' => 3, 'K' => 4, 'A' => 11 }.freeze
+  RANKS = { 6 => 6, 7 => 7, 8 => 8, 9 => 9, "\u2469" => 10, 'J' => 2, 'Q' => 3, 'K' => 4, 'A' => 11 }.freeze
 
   attr_accessor :suit, :value
 
@@ -14,13 +14,13 @@ class Card
 
   def to_s
     """
-    +------+
+    --------
     |#{@value}     |
     | #{@suit}    |
     |  #{@suit}   |
     |   #{@suit}  |
     |     #{@value}|
-    +------+
+    --------
     """
   end
 
