@@ -38,16 +38,16 @@ class BlackJack
     total_value = 0
     opp_total_value = 0
     puts 'My cards:'
-    hand.show_cards(hand.my_cards)
+    hand.my_cards.first.display_hand(hand.my_cards)
+    
+    #hand.show_cards(hand.my_cards)
     puts 'Opponents cards:'
     opp_hand.show_empty_cards(opp_hand.opp_cards)
     hand.my_cards.each do |card|
-      card.my_ace_validation(card)
-      total_value += card.value
+      total_value += Card::RANKS[card.value]
     end
     opp_hand.opp_cards.each do |card|
-      card.opp_ace_validation(card, opp_total_value)
-      opp_total_value += card.value
+      opp_total_value += Card::RANKS[card.value]
     end
     ask_about_continued(total_value, deck, hand, opp_total_value, opp_hand)
   end
@@ -84,8 +84,7 @@ class BlackJack
       end
       puts 'Opponents cards:'
       opp_hand.show_empty_cards(opp_hand.opp_cards)
-      hand.my_cards[-1].my_ace_validation(hand.my_cards[-1])
-      total_value += hand.my_cards[-1].value
+      total_value += Card::RANKS[hand.my_cards[-1].value]
       ask_about_continued(total_value, deck, hand, opp_total_value, opp_hand)
     end
   end

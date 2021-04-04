@@ -34,7 +34,7 @@ class MyCards
 
   def card(hand)
     print "\n#{' ' * 10}"
-    1.upto(hand.size) { |i| print "|#{hand[i - 1].rank}     |     " }
+    1.upto(hand.size) { |i| print "|#{hand[i - 1].value}     |     " }
     print "\n#{' ' * 10}"
     1.upto(hand.size) { |i| print "| #{hand[i - 1].suit}    |     " }
     print "\n#{' ' * 10}"
@@ -42,6 +42,6 @@ class MyCards
     print "\n#{' ' * 10}"
     1.upto(hand.size) { |i| print "|   #{hand[i - 1].suit}  |     " }
     print "\n#{' ' * 10}"
-    1.upto(hand.size) { |i| print "|     #{hand[i - 1].rank}|     " }
+    1.upto(hand.size) { |i| print "|     #{hand[i - 1].value}|     " }
   end
 end
