@@ -39,16 +39,10 @@ class BlackJack
     opp_total_value = 0
     puts 'My cards:'
     hand.my_cards.first.display_hand(hand.my_cards)
-    
-    #hand.show_cards(hand.my_cards)
     puts 'Opponents cards:'
     opp_hand.show_empty_cards(opp_hand.opp_cards)
-    hand.my_cards.each do |card|
-      total_value += Card::RANKS[card.value]
-    end
-    opp_hand.opp_cards.each do |card|
-      opp_total_value += Card::RANKS[card.value]
-    end
+    hand.my_cards.each { |card| total_value += Card::RANKS[card.value] } 
+    opp_hand.opp_cards.each { |card| opp_total_value += Card::RANKS[card.value] }
     ask_about_continued(total_value, deck, hand, opp_total_value, opp_hand)
   end
 
@@ -61,7 +55,6 @@ class BlackJack
     loop do
       if opp_total_value < 17
         opp_hand.continue(deck, opp_hand, opp_total_value)
-        opp_hand.opp_cards[-1].value == 11 if opp_total_value < 11
         opp_total_value += opp_hand.opp_cards[-1].value
       end
       a = opp_total_value
