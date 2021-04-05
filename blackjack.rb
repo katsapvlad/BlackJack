@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 require 'io/console'
-require './my_cards'
-require './opponents_cards'
 require './card'
+require './player'
 # this class includes some information about the game process
 class BlackJack
   def start_game
@@ -33,20 +32,20 @@ class BlackJack
 
     puts "\n\n#{" \u2667   \u2662   \u2661   \u2664 " * 10}\n\n"
     deck = Deck.new
-    hand = MyCards.new(deck)
-    opp_hand = OpponentsCards.new(deck)
+    player_1 = Player.new(deck)
+    player_2 = Player.new(deck)
     total_value = 0
     opp_total_value = 0
     puts 'My cards:'
-    hand.my_cards.first.display_hand(hand.my_cards)
+    player_1.cards.first.display_hand(player_1.cards)
     puts 'Opponents cards:'
-    opp_hand.show_empty_cards(opp_hand.opp_cards)
-    hand.my_cards.each { |card| total_value += Card::RANKS[card.value] } 
-    opp_hand.opp_cards.each { |card| opp_total_value += Card::RANKS[card.value] }
-    ask_about_continued(total_value, deck, hand, opp_total_value, opp_hand)
+    player_2.cards.first.display_hidden_hand(player_2.cards)
+    player_1.cards.each { |card| total_value += Card::RANKS[card.value] } 
+    player_2.cards.each { |card| opp_total_value += Card::RANKS[card.value] }
+    ask_about_continued(total_value, deck, player_1, opp_total_value, player_2)
   end
 
-  def ask_about_continued(total_value, deck, hand, opp_total_value, opp_hand)
+  def ask_about_continued(total_value, deck, player_1, opp_total_value, player_2)
     puts "\nTotal value: #{total_value}\nDo you want to take another card?: Yes(default) or No"
     answ = gets.strip.capitalize
     if answ == 'No'
@@ -54,8 +53,8 @@ class BlackJack
     b = 0
     loop do
       if opp_total_value < 17
-        opp_hand.continue(deck, opp_hand, opp_total_value)
-        opp_total_value += opp_hand.opp_cards[-1].value
+        player_2.continue(deck, player_2)
+        opp_total_value += player_2.cards[-1].value
       end
       a = opp_total_value
       break if a == b
@@ -63,22 +62,23 @@ class BlackJack
       b = opp_total_value
     end
       puts 'My cards:'
-      hand.my_cards.first.display_hand(hand.my_cards)
+      player_1.cards.first.display_hand(player_1.cards)
       puts 'Opponents cards:'
-      opp_hand.opp_cards.first.display_hand(opp_hand.opp_cards)
+      player_2.cards.first.display_hand(player_2.cards)
       result_calculating(total_value, opp_total_value)
       play_again
     else
-
-      hand.continue(deck, hand)
+      player_1.continue(deck, player_1)
       if opp_total_value < 17
-        opp_hand.continue(deck, opp_hand, opp_total_value)
-        opp_total_value += opp_hand.opp_cards[-1].value
+        player_2.continue(deck, player_2)
+        opp_total_value += Card::RANKS[player_2.cards[-1].value]
       end
+      puts 'My cards:'
+      player_1.cards.first.display_hand(player_1.cards)
       puts 'Opponents cards:'
-      opp_hand.show_empty_cards(opp_hand.opp_cards)
-      total_value += Card::RANKS[hand.my_cards[-1].value]
-      ask_about_continued(total_value, deck, hand, opp_total_value, opp_hand)
+      player_2.cards.first.display_hidden_hand(player_2.cards)
+      total_value += Card::RANKS[player_1.cards[-1].value]
+      ask_about_continued(total_value, deck, player_1, opp_total_value, player_2)
     end
   end
 
