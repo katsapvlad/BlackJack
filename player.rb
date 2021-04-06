@@ -4,9 +4,13 @@ require './deck'
 
 # this class includes some information about my cards
 class Player
-  attr_accessor :cards
+  attr_accessor :name, :cards
 
-  def initialize(deck)
+  def initialize(name)
+    @name = name
+  end
+
+  def get_cards(deck)
     @cards = []
     2.times do
       @cards << deck.cards[0]

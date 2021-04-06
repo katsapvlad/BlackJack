@@ -36,19 +36,19 @@ class Card
     "
   end
 
-  def display_hand(cards, message)
+  def self.display_hand(cards, message)
     puts message
     strings = cards.map { |c| c.open.each_line.to_a }
     display(strings)
   end
 
-  def display_hidden_hand(cards, message)
+  def self.display_hidden_hand(cards, message)
     puts message
     strings = cards.map { |c| c.hide.each_line.to_a }
     display(strings)
   end
 
-  def display(strings)
+  def self.display(strings)
     first, *rest = *strings
     side_by_side = first.zip(*rest)
     side_by_side.each do |row|
