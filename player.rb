@@ -14,7 +14,7 @@ class Player
     end
   end
 
-  def continue(deck, hand)
+  def continue(deck, _hand)
     @cards << deck.cards[0]
     deck.cards.delete_at(0)
   end

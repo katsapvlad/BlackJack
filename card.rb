@@ -13,7 +13,7 @@ class Card
   end
 
   def open
-    """
+    "
     --------
     |#{@value}     |
     | #{@suit}    |
@@ -21,11 +21,11 @@ class Card
     |   #{@suit}  |
     |     #{@value}|
     --------
-    """
+    "
   end
 
   def hide
-    """
+    "
     --------
     |      |
     |      |
@@ -33,22 +33,24 @@ class Card
     |      |
     |      |
     --------
-    """
+    "
   end
 
-  def display_hand(cards)
+  def display_hand(cards, message)
+    puts message
     strings = cards.map { |c| c.open.each_line.to_a }
     display(strings)
   end
 
-  def display_hidden_hand(cards)
+  def display_hidden_hand(cards, message)
+    puts message
     strings = cards.map { |c| c.hide.each_line.to_a }
     display(strings)
   end
 
   def display(strings)
     first, *rest = *strings
-    side_by_side = first.zip *rest
+    side_by_side = first.zip(*rest)
     side_by_side.each do |row|
       row.each { |s| print s.chomp }
       print "\n"

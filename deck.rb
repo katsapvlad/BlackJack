@@ -8,8 +8,8 @@ class Deck
 
   def initialize
     @cards = []
-    Card::SUITS_MAP.each do |suit_key, suit_value|
-      Card::RANKS.each do |rank_key, rank_value|
+    Card::SUITS_MAP.each do |_suit_key, suit_value|
+      Card::RANKS.each do |rank_key, _rank_value|
         card = Card.new(suit_value, rank_key)
         @cards << card
       end
