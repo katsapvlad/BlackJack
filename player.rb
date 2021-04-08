@@ -10,7 +10,7 @@ class Player
     @name = name
   end
 
-  def get_cards(deck)
+  def take_cards(deck)
     @cards = []
     2.times do
       @cards << deck.cards[0]
@@ -18,7 +18,7 @@ class Player
     end
   end
 
-  def continue(deck, _hand)
+  def continue(deck)
     @cards << deck.cards[0]
     deck.cards.delete_at(0)
   end

@@ -12,6 +12,27 @@ class Card
     @value = value
   end
 
+  def self.display_hand(cards, message)
+    puts message
+    strings = cards.map { |c| c.open.each_line.to_a }
+    display(strings)
+  end
+
+  def self.display_hidden_hand(cards, message)
+    puts message
+    strings = cards.map { |c| c.hide.each_line.to_a }
+    display(strings)
+  end
+
+  def self.display(strings)
+    first, *rest = *strings
+    side_by_side = first.zip(*rest)
+    side_by_side.each do |row|
+      row.each { |s| print s.chomp }
+      print "\n"
+    end
+  end
+
   def open
     "
     --------
@@ -34,26 +55,5 @@ class Card
     |      |
     --------
     "
-  end
-
-  def self.display_hand(cards, message)
-    puts message
-    strings = cards.map { |c| c.open.each_line.to_a }
-    display(strings)
-  end
-
-  def self.display_hidden_hand(cards, message)
-    puts message
-    strings = cards.map { |c| c.hide.each_line.to_a }
-    display(strings)
-  end
-
-  def self.display(strings)
-    first, *rest = *strings
-    side_by_side = first.zip(*rest)
-    side_by_side.each do |row|
-      row.each { |s| print s.chomp }
-      print "\n"
-    end
   end
 end
