@@ -44,8 +44,10 @@ class BlackJack
   end
 
   def take_cards
-    @player.take_cards(@deck)
-    @dealer.take_cards(@deck)
+    2.times do
+      @player.take_card(@deck)
+      @dealer.take_card(@deck)
+    end
   end
 
   def process_cards
@@ -73,7 +75,7 @@ class BlackJack
   def dealer_score_calculating(var_a, var_b)
     loop do
       if @dealer.score < 17
-        @dealer.continue(@deck)
+        @dealer.take_card(@deck)
       end
       var_a = @dealer.score
       break if var_a == var_b
@@ -84,9 +86,9 @@ class BlackJack
   end
 
   def answ_yes
-    @player.continue(@deck)
+    @player.take_card(@deck)
     if @dealer.score < 17
-      @dealer.continue(@deck)
+      @dealer.take_card(@deck)
     end
     Card.display_hand(@player.cards, 'My cards:')
     Card.display_hidden_hand(@dealer.cards, 'Opponents cards:')
